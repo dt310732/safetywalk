@@ -1,0 +1,67 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block title %}Nowy Safety Walk{% endblock %}
+
+
+{% block content %}
+
+  <div class="card">
+    <div class="pagehead">
+      <h1 class="h1">Nowy Safety Walk</h1>
+      <a class="btn" href="{% url 'safetywalk_list' %}">Powrót do listy</a>
+    </div>
+
+    <form method="post" id="safetywalkForm" class="form">
+      {% csrf_token %}
+
+      <section class="section">
+        <div class="section__head">
+          <h2 class="h2">Dane Safety Walk</h2>
+        </div>
+        <div class="section__body">
+          {{ form.as_p }}
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section__head">
+          <h2 class="h2">Obserwacje</h2>
+          <button type="button" id="addObsBtn" class="btn btn--primary">+ Dodaj obserwacje</button>
+        </div>
+
+        {{ formset.management_form }}
+
+        <div id="obsContainer" class="obs-list">
+          {% for f in formset %}
+            <div class="obs-form obs-card">
+              <div class="obs-card__head">
+                <strong>Observation</strong>
+                <button type="button" class="btn btn--danger removeObsBtn">Usun</button>
+              </div>
+
+              <div class="obs-card__body">
+                {{ f.as_p }}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </section>
+
+      <div class="actions">
+        <button type="submit" class="btn btn--primary">Zapisz</button>
+      </div>
+    </form>
+  </div>
+  {% if messages %}
+<script>
+  window.djangoMessages = [
+    {% for message in messages %}
+      "{{ message|escapejs }}",
+    {% endfor %}
+  ];
+</script>
+{% endif %}
+
+<script src="{% static 'core/js/safetywalk_form.js' %}"></script>
+{% endblock %}
+
