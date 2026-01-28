@@ -2,73 +2,50 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render,get_object_or_404
 from django.db import transaction
 from django.contrib import messages
-from .forms import SafetyWalkForm, ObservationFormSet
-from .models import SafetyWalk
-from .models import Employee  # jesli potrzebujesz lookupu
+from .forms import SafetyWalkForm, ObservationForm
+from .models import SafetyWalk, Employee, Observation
+from django.contrib.auth import logout
+from django.contrib.auth.views import LoginView
 @login_required
 def safetywalk_create(request):
     if request.method == "POST":
-        form = SafetyWalkForm(request.POST)
+        sw_form = SafetyWalkForm(request.POST)
+        obs_form = ObservationForm(request.POST)
 
-        if form.is_valid():
+        if sw_form.is_valid() and obs_form.is_valid():
+            employee = Employee.objects.filter(user=request.user).first()
+            if not employee:
+                messages.error(
+                    request,
+                    "Brak przypisanego Employee do tego konta. Podepnij usera w adminie.",
+                )
+                return render(
+                    request,
+                    "core/safetywalk_form.html",
+                    {"form": sw_form, "obs_form": obs_form},
+                )
+
             with transaction.atomic():
-                sw = form.save(commit=False)
+                sw = sw_form.save(commit=False)
                 sw.performed_by = request.user
                 sw.save()
 
-                # TERAZ dopiero budujemy formset pod zapisany SafetyWalk
-                formset = ObservationFormSet(request.POST, instance=sw)
+                obs = obs_form.save(commit=False)
+                obs.safety_walk = sw
+                obs.employee = employee
+                obs.save()
 
-                if formset.is_valid():
-                    # wymaganie: co najmniej jedna obserwacja
-                    valid_forms = [
-                        f for f in formset.forms
-                        if f.cleaned_data and not f.cleaned_data.get("DELETE", False)
-                    ]
-                    if len(valid_forms) == 0:
-                        formset._non_form_errors = formset.error_class(
-                            ["Dodaj przynajmniej jedna obserwacje."]
-                        )
-                        return render(
-                            request,
-                            "core/safetywalk_form.html",
-                            {"form": form, "formset": formset},
-                        )
-
-                    # ustawiamy employee automatycznie
-                    observations = formset.save(commit=False)
-                    employee = Employee.objects.filter(user=request.user).first()
-                    if not employee:
-                        formset._non_form_errors = formset.error_class(
-                            ["Brak przypisanego Employee do tego konta. Podepnij usera w adminie."]
-                        )
-                        return render(
-                            request,
-                            "core/safetywalk_form.html",
-                            {"form": form, "formset": formset},
-                        )
-                    for obs in observations:
-                        obs.employee = employee
-                        obs.save()
-
-                    # usun zaznaczone obserwacje (DELETE)
-                    for obj in formset.deleted_objects:
-                        obj.delete()
-
-                    messages.success(request, "Raport zostal wyslany.")
-                    return redirect("safetywalk_list")
-
-        # jak form niewazny albo formset niewazny, trzeba wyrenderowac oba
-        formset = ObservationFormSet(request.POST)
+            messages.success(request, "Raport zostal wyslany.")
+            return redirect("safetywalk_list")
 
     else:
-        form = SafetyWalkForm()
-        formset = ObservationFormSet()
+        sw_form = SafetyWalkForm()
+        obs_form = ObservationForm()
 
     return render(
         request,
         "core/safetywalk_form.html",
-        {"form": form, "formset": formset},
+        {"form": sw_form, "obs_form": obs_form},
     )
 
 def home(request):
@@ -91,11 +68,19 @@ def safetywalk_detail(request, pk):
     safetywalk = get_object_or_404(
         SafetyWalk,
         pk=pk,
-        performed_by=request.user,  # user widzi tylko swoje
+        performed_by=request.user,
     )
+    return render(request, "core/safetywalk_detail.html", {"safetywalk": safetywalk})
 
-    return render(
-        request,
-        "core/safetywalk_detail.html",
-        {"safetywalk": safetywalk},
-    )
+
+def logout_view(request):
+    logout(request)
+    messages.success(request, "Zostałeś wylogowany.")
+    return redirect("login")
+
+
+
+class CustomLoginView(LoginView):
+    def form_invalid(self, form):
+        messages.error(self.request, "Błędny login lub hasło.")
+        return super().form_invalid(form)

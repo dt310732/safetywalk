@@ -1,6 +1,6 @@
 from django import forms
-from django.forms import inlineformset_factory
 from .models import SafetyWalk, Observation
+from django.contrib.auth.forms import AuthenticationForm
 
 class SafetyWalkForm(forms.ModelForm):
     class Meta:
@@ -8,10 +8,14 @@ class SafetyWalkForm(forms.ModelForm):
         fields = ["date", "shift", "area"]  # number i performed_by ustawiamy w kodzie
 
 
-ObservationFormSet = inlineformset_factory(
-    parent_model=SafetyWalk,
-    model=Observation,
-    fields=["ppe", "work", "environment", "reaction", "comment"],
-    extra=1,
-    can_delete=True,
-)
+class ObservationForm(forms.ModelForm):
+    class Meta:
+        model = Observation
+        fields = ["ppe", "work", "environment", "reaction", "comment"]
+
+
+class LoginForm(AuthenticationForm):
+    error_messages = {
+        "invalid_login": "Błędny login lub hasło.",
+        "inactive": "To konto jest nieaktywne.",
+    }

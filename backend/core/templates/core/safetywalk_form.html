@@ -2,7 +2,6 @@
 {% load static %}
 {% block title %}Nowy Safety Walk{% endblock %}
 
-
 {% block content %}
 
   <div class="card">
@@ -25,26 +24,36 @@
 
       <section class="section">
         <div class="section__head">
-          <h2 class="h2">Obserwacje</h2>
-          <button type="button" id="addObsBtn" class="btn btn--primary">+ Dodaj obserwacje</button>
+          <h2 class="h2">Obserwacja</h2>
         </div>
 
-        {{ formset.management_form }}
+        <div class="obs-grid">
+  <div class="field">
+  <div class="label">Typ obserwacji *</div>
 
-        <div id="obsContainer" class="obs-list">
-          {% for f in formset %}
-            <div class="obs-form obs-card">
-              <div class="obs-card__head">
-                <strong>Observation</strong>
-                <button type="button" class="btn btn--danger removeObsBtn">Usun</button>
-              </div>
+  <div class="checkrow" id="obsTypeGroup">
+    <label class="checkpill">
+      {{ obs_form.ppe }} <span>PPE</span>
+    </label>
+    <label class="checkpill">
+      {{ obs_form.work }} <span>Work</span>
+    </label>
+    <label class="checkpill">
+      {{ obs_form.environment }} <span>Environment</span>
+    </label>
+  </div>
+</div>
 
-              <div class="obs-card__body">
-                {{ f.as_p }}
-              </div>
-            </div>
-          {% endfor %}
-        </div>
+  <div class="field">
+    <label class="label" for="{{ obs_form.reaction.id_for_label }}">Reaction *</label>
+    {{ obs_form.reaction }}
+  </div>
+
+  <div class="field obs-comment">
+    <label class="label" for="{{ obs_form.comment.id_for_label }}">Comment *</label>
+    {{ obs_form.comment }}
+  </div>
+</div>
       </section>
 
       <div class="actions">
@@ -52,16 +61,6 @@
       </div>
     </form>
   </div>
-  {% if messages %}
-<script>
-  window.djangoMessages = [
-    {% for message in messages %}
-      "{{ message|escapejs }}",
-    {% endfor %}
-  ];
-</script>
-{% endif %}
-
 <script src="{% static 'core/js/safetywalk_form.js' %}"></script>
 {% endblock %}
 

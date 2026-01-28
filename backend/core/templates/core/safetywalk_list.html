@@ -22,16 +22,4 @@
       {% endfor %}
     </ul>
   </div>
-
-  {% if messages %}
-    {% block extra_js %}
-      <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          {% for message in messages %}
-            alert("{{ message|escapejs }}");
-          {% endfor %}
-        });
-      </script>
-    {% endblock %}
-  {% endif %}
 {% endblock %}

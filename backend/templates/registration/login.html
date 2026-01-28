@@ -3,21 +3,26 @@
 {% block title %}Logowanie{% endblock %}
 
 {% block content %}
-  <div class="card" style="max-width:520px;margin:0 auto;">
-    <h1 class="h1">Logowanie</h1>
-    <p class="p">Zaloguj sie, aby przejsc do aplikacji.</p>
+<div class="card" style="max-width:520px;margin:0 auto;">
+  <h1 class="h1">Logowanie</h1>
+  <p class="p">Zaloguj się, aby przejść do aplikacji.</p>
 
-    {% if form.errors %}
-      <div class="error">Bledny login lub haslo.</div>
-    {% endif %}
+  <form method="post" class="form" novalidate>
+    {% csrf_token %}
 
-    <form method="post" class="form" style="margin-top:14px;">
-      {% csrf_token %}
-      {{ form.as_p }}
+    <div class="field">
+      {{ form.username.label_tag }}
+      {{ form.username }}
+    </div>
 
-      <div class="actions">
-        <button class="btn btn--primary" type="submit">Zaloguj</button>
-      </div>
-    </form>
-  </div>
+    <div class="field">
+      {{ form.password.label_tag }}
+      {{ form.password }}
+    </div>
+
+    <div class="actions">
+      <button class="btn btn--primary" type="submit">Zaloguj</button>
+    </div>
+  </form>
+</div>
 {% endblock %}

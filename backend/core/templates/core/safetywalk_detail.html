@@ -7,60 +7,72 @@
     <div class="pagehead">
       <div>
         <h1 class="h1">Safety Walk {{ safetywalk.number }}</h1>
-        <p class="p">Szczegóły raportu oraz lista obserwacji.</p>
+        <p class="p">Szczegóły raportu.</p>
       </div>
       <a class="btn" href="{% url 'safetywalk_list' %}">Powrót do listy</a>
     </div>
 
+    <!-- DANE -->
     <section class="section">
       <div class="section__head">
         <h2 class="h2">Dane</h2>
       </div>
 
       <div class="kv">
-        <div class="kv__item"><span class="kv__k">Date</span><span class="kv__v">{{ safetywalk.date }}</span></div>
-        <div class="kv__item"><span class="kv__k">Shift</span><span class="kv__v">{{ safetywalk.shift }}</span></div>
-        <div class="kv__item"><span class="kv__k">Area</span><span class="kv__v">{{ safetywalk.area }}</span></div>
-        <div class="kv__item"><span class="kv__k">Performed by</span><span class="kv__v">{{ safetywalk.performed_by }}</span></div>
+        <div class="kv__item">
+          <span class="kv__k">Date</span>
+          <span class="kv__v">{{ safetywalk.date }}</span>
+        </div>
+        <div class="kv__item">
+          <span class="kv__k">Shift</span>
+          <span class="kv__v">{{ safetywalk.shift }}</span>
+        </div>
+        <div class="kv__item">
+          <span class="kv__k">Area</span>
+          <span class="kv__v">{{ safetywalk.area }}</span>
+        </div>
+        <div class="kv__item">
+          <span class="kv__k">Performed by</span>
+          <span class="kv__v">{{ safetywalk.performed_by }}</span>
+        </div>
       </div>
     </section>
 
-    <section class="section" style="margin-top:14px;">
-      <div class="section__head">
-        <h2 class="h2">Observations</h2>
-        <span class="badge">{{ safetywalk.observations.count }}</span>
-      </div>
-
-      <div class="obs-list">
-        {% for obs in safetywalk.observations.all %}
-          <div class="obs-card">
-            <div class="obs-card__head">
-              <strong>Observation {{ forloop.counter }}</strong>
-            </div>
-
-            <div class="obs-card__body">
-              <p class="p" style="margin:0 0 8px;">
-                <strong>PPE:</strong> {{ obs.ppe }} &nbsp;|&nbsp;
-                <strong>Work:</strong> {{ obs.work }} &nbsp;|&nbsp;
-                <strong>Environment:</strong> {{ obs.environment }}
-              </p>
-
-              <p style="margin:0 0 8px;">
-                <strong>Reaction:</strong> {{ obs.reaction }}
-              </p>
-
-              {% if obs.comment %}
-                <div class="note">
-                  <div class="note__title">Comment</div>
-                  <div class="note__body">{{ obs.comment }}</div>
-                </div>
-              {% endif %}
-            </div>
-          </div>
-        {% empty %}
-          <p class="p">Brak obserwacji.</p>
-        {% endfor %}
-      </div>
-    </section>
+    <!-- OBSERWACJA -->
+<section class="section" style="margin-top:14px;">
+  <div class="section__head">
+    <h2 class="h2">Observation</h2>
   </div>
+
+  {% if safetywalk.observation %}
+    {% with obs=safetywalk.observation %}
+      <div class="obs-card">
+        <div class="obs-card__body">
+          <p class="p" style="margin:0 0 8px;">
+            <strong>PPE:</strong> {{ obs.ppe|yesno:"Tak,Nie" }} &nbsp;|&nbsp;
+            <strong>Work:</strong> {{ obs.work|yesno:"Tak,Nie" }} &nbsp;|&nbsp;
+            <strong>Environment:</strong> {{ obs.environment|yesno:"Tak,Nie" }}
+          </p>
+
+          <p style="margin:0 0 8px;">
+            <strong>Reaction:</strong> {{ obs.reaction }}
+          </p>
+
+          <p style="margin:0 0 8px;">
+            <strong>Employee:</strong> {{ obs.employee }}
+          </p>
+
+          {% if obs.comment %}
+            <div class="note">
+              <div class="note__title">Comment</div>
+              <div class="note__body">{{ obs.comment }}</div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endwith %}
+  {% else %}
+    <p class="p">Brak obserwacji.</p>
+  {% endif %}
+</section>
 {% endblock %}

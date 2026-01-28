@@ -83,10 +83,10 @@ class SafetyWalk(models.Model):
         super().save(*args, **kwargs)
 
 class Observation(models.Model):
-    safety_walk = models.ForeignKey(
+    safety_walk = models.OneToOneField(
         SafetyWalk,
         on_delete=models.CASCADE,
-        related_name="observations",
+        related_name="observation",
     )
 
     employee = models.ForeignKey(
@@ -94,7 +94,7 @@ class Observation(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="observations",
+        related_name="observation",
     )
 
     # pola z Accessa (na start prosto)

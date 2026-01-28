@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{% block title %}SafetyWalk{% endblock %}</title>
   <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'core/css/forms.css' %}">
 </head>
 <body>
   <header class="topbar">
@@ -32,6 +33,20 @@
     </div>
   </main>
 
-  {% block extra_js %}{% endblock %}
-</body>
+    {% if messages %}
+    <script>
+    window.djangoMessages = [
+    {% for message in messages %}
+      {
+        text: "{{ message|escapejs }}",
+        level: "{{ message.tags }}"
+      },
+    {% endfor %}
+  ];
+  </script>
+{% endif %}
+
+    <div id="toast-container"></div>
+    <script src="{% static 'core/js/messages.js' %}"></script>
+  </body>
 </html>
