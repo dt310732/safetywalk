@@ -1,7 +1,9 @@
 from django.contrib import admin
 from .models import Department, Employee, SafetyWalk, Observation, Area, Reaction
 
-
+admin.site.site_header = "SafetyWalk – Administracja"
+admin.site.site_title = "SafetyWalk Admin"
+admin.site.index_title = "Panel administracyjny"
 
 admin.site.register(Department)
 admin.site.register(Employee)
