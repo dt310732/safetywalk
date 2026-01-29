@@ -16,33 +16,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.contrib.auth import views as auth_views
-from core.views import CustomLoginView
-#from core.forms import LoginForm
 from core import views as core_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
 
-    # 🔐 LOGIN – override TYLKO login
-    path(
-    "accounts/login/",
-    CustomLoginView.as_view(
-        template_name="registration/login.html"
-    ),
-    name="login",
-),
+    # logout (jeśli chcesz toast)
+    path("/logout/", core_views.logout_view, name="logout"),
 
-    # 🔓 LOGOUT – własny widok z toastem
-    path(
-        "accounts/logout/",
-        core_views.logout_view,
-        name="logout",
-    ),
-
-    # aplikacja
+    # app
     path("", include("core.urls")),
 
-    # pozostałe auth URL-e (password reset itd.)
+    # auth (reset hasła itd.)
     path("accounts/", include("django.contrib.auth.urls")),
 ]
+

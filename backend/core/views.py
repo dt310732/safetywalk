@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render,get_object_or_404
 from django.db import transaction
 from django.contrib import messages
-from .forms import SafetyWalkForm, ObservationForm
+from .forms import SafetyWalkForm, ObservationForm, LoginForm
 from .models import SafetyWalk, Employee, Observation
 from django.contrib.auth import logout
 from django.contrib.auth.views import LoginView
@@ -76,11 +76,20 @@ def safetywalk_detail(request, pk):
 def logout_view(request):
     logout(request)
     messages.success(request, "Zostałeś wylogowany.")
-    return redirect("login")
+    return redirect("/login/")
 
 
+
+#class CustomLoginView(LoginView):
+#    def form_invalid(self, form):
+#        messages.error(self.request, "Błędny login lub hasło.")
+#        return super().form_invalid(form)
+    
 
 class CustomLoginView(LoginView):
+    template_name = "core/login.html"
+    authentication_form = LoginForm  # 👈 TO JEST KLUCZ
+
     def form_invalid(self, form):
         messages.error(self.request, "Błędny login lub hasło.")
         return super().form_invalid(form)

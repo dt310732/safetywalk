@@ -5,8 +5,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{% block title %}SafetyWalk{% endblock %}</title>
-  <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'core/css/base.css' %}">
   <link rel="stylesheet" href="{% static 'core/css/forms.css' %}">
+  <link rel="stylesheet" href="{% static 'core/css/toast.css' %}">
+{% block extra_css %}{% endblock %}
 </head>
 <body>
   <header class="topbar">
@@ -20,8 +22,6 @@
             {% csrf_token %}
             <button class="btn" type="submit">Wyloguj</button>
           </form>
-        {% else %}
-          <a class="btn" href="{% url 'login' %}">Zaloguj</a>
         {% endif %}
       </nav>
     </div>

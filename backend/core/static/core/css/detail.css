@@ -1,0 +1,119 @@
+.pagehead{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:14px;
+}
+
+.h2{
+  font-size:16px;
+  margin:0;
+}
+
+.section{
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:14px;
+  background:#fff;
+}
+
+.section + .section{
+  margin-top:14px;
+}
+
+.section__head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+}
+
+.section__body p{
+  margin:10px 0;
+}
+
+/* Obserwacje */
+.obs-list{
+  display:grid;
+  gap:12px;
+  margin-top:12px;
+}
+
+.obs-card{
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  background:var(--card);
+  padding:12px;
+}
+
+.obs-card__head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+/* Key-Value grid (Dane) */
+.kv{
+  display:grid;
+  grid-template-columns:repeat(2, minmax(0, 1fr));
+  gap:10px 14px;
+}
+
+.kv__item{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:10px 12px;
+  background:#fff;
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.kv__k{
+  color:var(--muted);
+  font-weight:700;
+  font-size:13px;
+}
+
+.kv__v{
+  font-weight:800;
+  text-align:right;
+}
+
+/* Small badge */
+.badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:28px;
+  height:28px;
+  padding:0 10px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:#fff;
+  font-weight:900;
+  color:var(--muted);
+}
+
+/* Comment note */
+.note{
+  border:1px dashed var(--line);
+  border-radius:12px;
+  padding:10px 12px;
+  background:#fbfdff;
+}
+
+.note__title{
+  font-size:12px;
+  font-weight:900;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+
+.note__body{
+  white-space:pre-wrap;
+}

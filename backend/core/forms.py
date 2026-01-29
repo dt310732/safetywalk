@@ -15,6 +15,20 @@ class ObservationForm(forms.ModelForm):
 
 
 class LoginForm(AuthenticationForm):
+    username = forms.CharField(
+        label="Login",
+        widget=forms.TextInput(attrs={
+            "placeholder": "Wpisz login",
+            "autocomplete": "username",
+        })
+    )
+    password = forms.CharField(
+        label="Hasło",
+        widget=forms.PasswordInput(attrs={
+            "placeholder": "Wpisz hasło",
+            "autocomplete": "current-password",
+        })
+    )
     error_messages = {
         "invalid_login": "Błędny login lub hasło.",
         "inactive": "To konto jest nieaktywne.",

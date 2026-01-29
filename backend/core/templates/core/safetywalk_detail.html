@@ -1,7 +1,9 @@
 {% extends "core/base.html" %}
-
+{% load static %}
 {% block title %}Safety Walk {{ safetywalk.number }}{% endblock %}
-
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'core/css/detail.css' %}">
+{% endblock %}
 {% block content %}
   <div class="card">
     <div class="pagehead">

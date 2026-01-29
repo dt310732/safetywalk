@@ -1,7 +1,9 @@
 {% extends "core/base.html" %}
 {% load static %}
 {% block title %}Nowy Safety Walk{% endblock %}
-
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'core/css/main_form.css' %}">
+{% endblock %}
 {% block content %}
 
   <div class="card">

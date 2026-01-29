@@ -1,25 +1,28 @@
 {% extends "core/base.html" %}
-
+{% load static %}
 {% block title %}Moje Safety Walk{% endblock %}
-
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'core/css/list.css' %}">
+{% endblock %}
 {% block content %}
   <div class="card">
     <h1 class="h1">Moje Safety Walk</h1>
 
-    <p>
+    <p style="margin-bottom: 25px;">
       <a class="btn btn--primary" href="{% url 'safetywalk_create' %}">+ Nowy Safety Walk</a>
     </p>
 
-    <ul>
-      {% for sw in safetywalks %}
-        <li style="margin:10px 0;">
-          <a href="{% url 'safetywalk_detail' sw.pk %}">
-            {{ sw.date|date:"M d, Y" }} | {{ sw.shift }} | {{ sw.area }} | {{ sw.number }}
-          </a>
-        </li>
-      {% empty %}
-        <li class="p">Brak wpisow.</li>
-      {% endfor %}
-    </ul>
+    <ul class="sw-list">
+  {% for sw in safetywalks %}
+    <li class="sw-item">
+      <a href="{% url 'safetywalk_detail' sw.pk %}">
+        <span class="sw-index">{{ forloop.revcounter }}.</span>
+        {{ sw.date|date:"M d, Y" }} | {{ sw.shift }} | {{ sw.area }} | {{ sw.number }}
+      </a>
+    </li>
+  {% empty %}
+    <li class="p">Brak wpisów.</li>
+  {% endfor %}
+</ul>
   </div>
 {% endblock %}
