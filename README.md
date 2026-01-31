@@ -1,57 +1,101 @@
 # Safety Project
 
-Aplikacja webowa oparta o Django, uruchamiana lokalnie oraz produkcyjnie przy użyciu Docker oraz Docker Compose.
+Aplikacja webowa oparta o **Django**, uruchamiana lokalnie oraz produkcyjnie
+przy użyciu **Docker** oraz **Docker Compose**.
 
-Projekt służy do zarządzania danymi związanymi z bezpieczeństwem (np. safety walki, raporty, formularze).
+Projekt służy do zarządzania danymi związanymi z bezpieczeństwem  
+(np. safety walki, raporty, formularze).
+
+---
 
 ## Wymagania
 
 Do uruchomienia projektu lokalnie wymagane są:
+
 - Docker
 - Docker Compose
 - Git
 
+---
+
 ## Uruchomienie projektu lokalnie
 
-Aby uruchomić projekt lokalnie, wykonaj poniższe kroki w podanej kolejności.
+Wykonaj poniższe kroki w podanej kolejności.
 
-1.Najpierw sklonuj repozytorium na swój komputer:
-- git clone https://github.com/dt310732/safetywalk.git
-- cd safetywalk
-2.Następnie zmień nazwe pliku .env w katalogu głównym projektu.
-- mv .env.example .env
-3.Po skonfigurowaniu zmiennych środowiskowych zbuduj obrazy Dockera i uruchom kontenery:
-- docker compose build
-- docker compose up -d
-4.Po uruchomieniu kontenerów wykonaj migracje bazy danych:
-- docker compose exec web python manage.py migrate
-5.Następnie utwórz konto administratora, które umożliwi logowanie do panelu admina Django:
-- docker compose exec web python manage.py createsuperuser
+### 1. Sklonuj repozytorium
 
-Po poprawnym wykonaniu powyższych kroków aplikacja będzie dostępna w przeglądarce pod adresem:
-http://localhost:8000
+```bash
+git clone https://github.com/dt310732/safetywalk.git
+cd safetywalk
+```
+### 2. Skonfiguruj zmienne środowiskowe
 
-Panel administracyjny dostępny jest pod adresem:
-http://localhost:8000/admin
+Zmień nazwę pliku `.env.example` na `.env`:
 
+```bash
+mv .env.example .env
+```
+### 3. Zbuduj obrazy i uruchom kontenery
 
-Przydatne komendy
+Zbuduj obrazy Dockera:
+```bash
+docker compose build
+```
+Następnie uruchom kontenery w tle:
+```bash
+docker compose up -d
+```
+Możesz sprawdzić status kontenerów:
+```bash
+docker compose ps
+```
 
-Aby zatrzymać wszystkie kontenery, użyj polecenia:
+### 4. Wykonaj migracje bazy danych
 
-docker compose down
+Po uruchomieniu kontenerów wykonaj migracje:
+```bash
+docker compose exec web python manage.py migrate
+```
 
+### 5. Utwórz konto administratora
 
-Aby zrestartować kontenery:
+Utwórz superużytkownika Django, aby móc zalogować się do panelu admina:
+```bash
+docker compose exec web python manage.py createsuperuser
+```
 
-docker compose restart
+---
 
+## Dostęp do aplikacji
 
-Aby podejrzeć logi aplikacji:
+Po poprawnym uruchomieniu aplikacja będzie dostępna pod adresami:
 
+- 🌐 **Aplikacja:**  
+  👉 http://localhost:8000
+
+- 🔐 **Panel administratora:**  
+  👉 http://localhost:8000/admin
+
+---
+
+## Status aplikacji
+
+Jeżeli aplikacja nie działa poprawnie, sprawdź status kontenerów:
+
+```bash
+docker compose ps
+```
+Podgląd logów (pomocne przy debugowaniu):
+
+```bash
 docker compose logs -f
+```
 
+Zatrzymywanie aplikacji
 
-Uwagi końcowe
+Aby zatrzymać wszystkie kontenery:
 
-Projekt uruchamiany lokalnie działa w trybie developerskim. Konfiguracja środowiska produkcyjnego może różnić się od lokalnej. Zmiany w kodzie aplikacji są automatycznie widoczne bez konieczności restartowania kontenerów.
+```bash
+docker compose down
+```
+---
